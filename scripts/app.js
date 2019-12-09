@@ -1,5 +1,9 @@
-// Element containing the game board, difficulty, player token options
-const gameBoard = document.querySelector(".x_o_selector")
+import { WIN_COMBINATIONS } from "./utils.js";
+import { computeComputerMove, checkOccupied, isWinner } from "./easy.js";
+
+// Elements containing the game board, difficulty, player token options
+const gameBoard = document.querySelector(".x_o_selector");
+const board = [];
 
 // Elements for handling diffilculty selection options before game starts
 const easyDifficulty = document.createElement("div");
@@ -20,6 +24,7 @@ gameBoard.prepend(heading);
 let player1 = null;
 let player2 = null;
 let difficulty = null;
+let winner = false;
 
 // Simulation of synchronous time delay function, needs to be executed with async await
 
@@ -57,6 +62,86 @@ function hideDifficultySelectors() {
     heading.innerText = "Tic-Tac-Toe";
 }
 
+function createBoard() {
+    if (!board.length) {
+        for (let i = 0; i < 9; i++) {
+            board.push(document.createElement("div"));
+            board[i].innerText = " ";
+        }
+    } else {
+        board.forEach(elem => elem.innerText = " ");
+    }
+    return board
+}
+
+function setUpStyles() {
+    const board = createBoard();
+    let count = -1;
+    board.forEach((elem, index) => {
+        console.log(index);
+        let temp = index % 3;
+        if (!temp) {
+            ++count;
+        }
+        elem.classList.add("board", `row${count}${temp}`);
+    });
+    return board;
+}
+
+function setUpBoardEventListeners() {
+    for (let i = 0; i < 9; i++) {
+        board[i].addEventListener("click", (e) => {
+            if (checkOccupied(board[i], player1, player2)) {
+                board[i].innerText = player1;
+                console.log(e);
+                let { player1: play1, player2: p2 } = isWinner(board, WIN_COMBINATIONS, player1, player2);
+                if (play1) {
+                    alert("Player 1 Won The Game")
+                    gameBoard.querySelectorAll(".row").forEach(elem => elem.remove());
+                    heading.innerText = "Choose X or O";
+                    gameBoard.append(xSelector, xSelectorBackFace, oSelector, oSelectorBackFace);
+                    return;
+                }
+                let { player1: p1, player2: play2 } = isWinner(board, player1, player2);
+                computeComputerMove();
+                if (play2) {
+                    alert("Player 2 Won The Game");
+                    gameBoard.querySelectorAll(".row").forEach(elem => elem.remove());
+                    heading.innerText = "Choose X or O";
+                    gameBoard.append(xSelector, xSelectorBackFace, oSelector, oSelectorBackFace);
+                    return;
+                }
+
+            } else {
+                alert("Position is occupied");
+            }
+        });
+    }
+}
+
+function beginGame() {
+    const temp = setUpStyles();
+    if (!board.length)
+        temp.forEach(elem => board.push(elem));
+    let row;
+    let count = -1;
+    board.forEach((elem, index) => {
+        if (!(index % 3)) {
+            if (count != -1)
+                gameBoard.append(row);
+            ++count;
+            row = document.createElement("div");
+            row.classList.add("row")
+            row.append(elem);
+        } else {
+            row.append(elem);
+        }
+        if (index == 8)
+            gameBoard.append(row);
+    });
+    setUpBoardEventListeners();
+
+}
 // O Token Selector event handlers
 
 oSelector.addEventListener("mouseover", () => {
@@ -132,9 +217,13 @@ xSelectorBackFace.addEventListener("click", () => {
 easyDifficulty.addEventListener("click", () => {
     difficulty = "easy";
     hideDifficultySelectors();
+    beginGame();
 });
 
 mediumDifficulty.addEventListener("click", () => {
     difficulty = "medium";
     hideDifficultySelectors();
+    beginGame();
 });
+
+export { board, player1, player2 };

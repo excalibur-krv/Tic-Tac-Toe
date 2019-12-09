@@ -52,18 +52,16 @@ body {
     visibility: hidden;
     display: inline-block;
     position: absolute;
+    background-color: black;
+    color: white;
 }
 
 .o_backface {
     left: 50%;
-    background-color: black;
-    color: white;
 }
 
 .x_backface {
     right: 50%;
-    background-color: black;
-    color: white;
 }
 
 .x_o_selector {
@@ -75,7 +73,7 @@ body {
     display: block;
     color: white;
     font-size: 50px;
-    margin: 0 auto;
+    margin: 50px auto;
     text-align: center;
 }
 
@@ -99,6 +97,86 @@ body {
     top: 25%;
     position: absolute;
     padding: 0 50px;
+}
+
+
+/* Styles for game board */
+
+.board {
+    background-color: black;
+    color: white;
+    width: 25%;
+    font-size: 50px;
+    margin: 10px 10px;
+    height: 50px;
+    padding: 15px 15px;
+    text-align: center;
+    display: table-cell;
+}
+
+.row {
+    display: table;
+    width: 50%;
+    height: 20%;
+    left: 25%;
+    right: 25%;
+    top: 10%;
+    table-layout: fixed;
+    position: sticky;
+}
+
+.row00 {
+    border-right: 5px solid white;
+    border-bottom: 5px solid white;
+    /* position: relative; */
+}
+
+.row01 {
+    border-left: 5px solid white;
+    border-right: 5px solid white;
+    border-bottom: 5px solid white;
+    /* position: relative; */
+}
+
+.row02 {
+    border-left: 5px solid white;
+    border-bottom: 5px solid white;
+    /* position: relative; */
+}
+
+.row10 {
+    border-top: 5px solid white;
+    border-bottom: 5px solid white;
+    border-right: 5px solid white;
+}
+
+.row11 {
+    border-top: 5px solid white;
+    border-bottom: 5px solid white;
+    border-right: 5px solid white;
+    border-left: 5px solid white;
+}
+
+.row12 {
+    border-bottom: 5px solid white;
+    border-top: 5px solid white;
+    border-left: 5px solid white;
+}
+
+.row20 {
+    border-right: 5px solid white;
+    border-top: 5px solid white;
+}
+
+.row21 {
+    border-right: 5px solid white;
+    border-top: 5px solid white;
+    border-left: 5px solid white;
+}
+
+.row22 {
+    border-top: 5px solid white;
+    border-left: 5px solid white;
 }
 
 
