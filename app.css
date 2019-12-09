@@ -1,0 +1,86 @@
+html,
+body {
+    height: 100%;
+    background-color: black;
+    font-family: monospace;
+}
+
+
+/* Styles for card displaying x and o for the player to chose */
+
+.x_selector {
+    background-color: black;
+    color: white;
+    right: 50%;
+    margin-right: 50px;
+}
+
+.o_selector {
+    background-color: white;
+    left: 50%;
+    top: 25%;
+    margin-left: 50px;
+}
+
+.x_selector,
+.o_selector {
+    display: inline-block;
+    font-size: 400px;
+    width: 30%;
+    top: 25%;
+    position: absolute;
+    padding: 0 50px;
+}
+
+.flip {
+    transition: all 1.5s;
+    transform-style: preserve-3d;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+.o_backface,
+.x_backface {
+    font-size: 30px;
+    text-align: center;
+    top: 50%;
+    bottom: 50%;
+    padding: 0 50px;
+    visibility: hidden;
+    display: inline-block;
+    position: absolute;
+}
+
+.o_backface {
+    left: 50%;
+    background-color: black;
+    color: white;
+}
+
+.x_backface {
+    right: 50%;
+    background-color: black;
+    color: white;
+}
+
+.x_o_selector {
+    text-align: center;
+    height: 100%;
+}
+
+.x_o_title {
+    display: block;
+    color: white;
+    font-size: 50px;
+    margin: 0 auto;
+    text-align: center;
+    /* font-style: italic; */
+}
+
+.unhide {
+    visibility: visible;
+}
+
+.hide {
+    visibility: hidden;
+}
