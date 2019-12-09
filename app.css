@@ -15,6 +15,10 @@ body {
     margin-right: 50px;
 }
 
+.selector_size {
+    font-size: 400px;
+}
+
 .o_selector {
     background-color: white;
     left: 50%;
@@ -25,7 +29,6 @@ body {
 .x_selector,
 .o_selector {
     display: inline-block;
-    font-size: 400px;
     width: 30%;
     top: 25%;
     position: absolute;
@@ -74,8 +77,32 @@ body {
     font-size: 50px;
     margin: 0 auto;
     text-align: center;
-    /* font-style: italic; */
 }
+
+
+/* Styles for difficulty options */
+
+.difficulty_size {
+    font-size: 50px;
+}
+
+.difficulty_size:hover {
+    color: #fff;
+    text-shadow: 1px 1px 10px #fff, 1px 1px 10px #000;
+}
+
+.medium_size {
+    color: white;
+    background-color: black;
+    display: inline-block;
+    width: 30%;
+    top: 25%;
+    position: absolute;
+    padding: 0 50px;
+}
+
+
+/* Styles for hidding and unhidding elements */
 
 .unhide {
     visibility: visible;
