@@ -1,5 +1,6 @@
-import { WIN_COMBINATIONS } from "./utils.js";
-import { computeComputerMove, checkOccupied, isWinner } from "./easy.js";
+import { WIN_COMBINATIONS, checkOccupied, checkDraw, findWinner } from "./utils.js";
+import { computeMediumComputerMove, visited } from "./medium.js";
+import { computeEasyComputerMove } from "./easy.js";
 
 // Elements containing the game board, difficulty, player token options
 const gameBoard = document.querySelector(".x_o_selector");
@@ -23,9 +24,7 @@ gameBoard.prepend(heading);
 
 let player1 = null;
 let player2 = null;
-let difficulty = null;
-let winner = false;
-
+let computeComputerMove = null;
 // Simulation of synchronous time delay function, needs to be executed with async await
 
 function delay(ms) {
@@ -36,7 +35,7 @@ function delay(ms) {
     });
 }
 
-// Functions responsible for hiding and unhiding dom elements and re-triggering game loop
+// Functions responsible for hiding and unhiding dom elements
 
 function hideXOSelectors() {
     oSelector.remove()
@@ -62,20 +61,27 @@ function hideDifficultySelectors() {
     heading.innerText = "Tic-Tac-Toe";
 }
 
+function hideBoard() {
+    gameBoard.querySelectorAll(".row").forEach(elem => elem.remove());
+    heading.innerText = "Choose X or O";
+    gameBoard.append(xSelector, xSelectorBackFace, oSelector, oSelectorBackFace);
+}
+
+// Functions responsible for working with the game board
+
 function createBoard() {
-    if (!board.length) {
-        for (let i = 0; i < 9; i++) {
-            board.push(document.createElement("div"));
-            board[i].innerText = " ";
-        }
-    } else {
-        board.forEach(elem => elem.innerText = " ");
+    for (let i = 0; i < 9; i++) {
+        board.pop();
+    }
+    for (let i = 0; i < 9; i++) {
+        board.push(document.createElement("div"));
+        board[i].innerText = " ";
     }
     return board
 }
 
 function setUpStyles() {
-    const board = createBoard();
+    createBoard();
     let count = -1;
     board.forEach((elem, index) => {
         console.log(index);
@@ -88,41 +94,48 @@ function setUpStyles() {
     return board;
 }
 
+
 function setUpBoardEventListeners() {
     for (let i = 0; i < 9; i++) {
-        board[i].addEventListener("click", (e) => {
+        board[i].addEventListener("click", () => {
+            let temp;
             if (checkOccupied(board[i], player1, player2)) {
-                board[i].innerText = player1;
-                console.log(e);
-                let { player1: play1, player2: p2 } = isWinner(board, WIN_COMBINATIONS, player1, player2);
-                if (play1) {
-                    alert("Player 1 Won The Game")
-                    gameBoard.querySelectorAll(".row").forEach(elem => elem.remove());
-                    heading.innerText = "Choose X or O";
-                    gameBoard.append(xSelector, xSelectorBackFace, oSelector, oSelectorBackFace);
-                    return;
-                }
-                let { player1: p1, player2: play2 } = isWinner(board, player1, player2);
-                computeComputerMove();
-                if (play2) {
-                    alert("Player 2 Won The Game");
-                    gameBoard.querySelectorAll(".row").forEach(elem => elem.remove());
-                    heading.innerText = "Choose X or O";
-                    gameBoard.append(xSelector, xSelectorBackFace, oSelector, oSelectorBackFace);
-                    return;
-                }
-
+                (async function eventDelay() {
+                    let id = await delay(100);
+                    clearInterval(id);
+                    board[i].innerText = player1;
+                    (async function winnerDelay() {
+                        let id = await delay(300);
+                        clearInterval(id);
+                        temp = findWinner(board, WIN_COMBINATIONS, player1, player2);
+                        if (temp) return;
+                    })();
+                    (async function eventDelay() {
+                        let id = await delay(100);
+                        clearInterval(id);
+                        computeComputerMove();
+                        (async function winnerDelay() {
+                            let id = await delay(400);
+                            clearInterval(id);
+                            if (temp) return;
+                            temp = findWinner(board, WIN_COMBINATIONS, player1, player2);
+                            if (temp) return;
+                        })();
+                    })();
+                })();
             } else {
                 alert("Position is occupied");
+            }
+            if (checkDraw(board, player1, player2)) {
+                alert("Draw");
+                hideBoard();
             }
         });
     }
 }
 
 function beginGame() {
-    const temp = setUpStyles();
-    if (!board.length)
-        temp.forEach(elem => board.push(elem));
+    setUpStyles();
     let row;
     let count = -1;
     board.forEach((elem, index) => {
@@ -142,6 +155,7 @@ function beginGame() {
     setUpBoardEventListeners();
 
 }
+
 // O Token Selector event handlers
 
 oSelector.addEventListener("mouseover", () => {
@@ -215,15 +229,16 @@ xSelectorBackFace.addEventListener("click", () => {
 // Difficulty event handlers
 
 easyDifficulty.addEventListener("click", () => {
-    difficulty = "easy";
+    computeComputerMove = computeEasyComputerMove;
     hideDifficultySelectors();
     beginGame();
 });
 
 mediumDifficulty.addEventListener("click", () => {
-    difficulty = "medium";
+    computeComputerMove = computeMediumComputerMove;
+    visited.forEach((_, index) => visited[index] = 0);
     hideDifficultySelectors();
     beginGame();
 });
 
-export { board, player1, player2 };
+export { board, player1, player2, hideBoard };
