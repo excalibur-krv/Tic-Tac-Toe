@@ -1,6 +1,6 @@
 import { WIN_COMBINATIONS, checkOccupied, checkDraw, findWinner } from "./utils.js";
-import { computeMediumComputerMove, visited } from "./medium.js";
-import { computeEasyComputerMove } from "./easy.js";
+import { computeHardComputerMove } from "./hard.js";
+import { computeEasyComputerMove, visited } from "./easy.js";
 
 // Elements containing the game board, difficulty, player token options
 const gameBoard = document.querySelector(".x_o_selector");
@@ -8,7 +8,7 @@ const board = [];
 
 // Elements for handling diffilculty selection options before game starts
 const easyDifficulty = document.createElement("div");
-const mediumDifficulty = document.createElement("div");
+const hardDifficulty = document.createElement("div");
 
 // Elements placeholders for X and O selection options before game starts
 const heading = document.createElement("h1");
@@ -48,16 +48,16 @@ function hideXOSelectors() {
     easyDifficulty.classList.add("x_selector", "difficulty_size");
     gameBoard.append(easyDifficulty);
 
-    mediumDifficulty.innerText = "Medium";
-    mediumDifficulty.classList.add("difficulty_size", "medium_size");
-    gameBoard.append(mediumDifficulty);
+    hardDifficulty.innerText = "Hard";
+    hardDifficulty.classList.add("difficulty_size", "medium_size");
+    gameBoard.append(hardDifficulty);
 
     console.log(`player1 is ${player1}, player2 is ${player2}`);
 }
 
 function hideDifficultySelectors() {
     easyDifficulty.remove();
-    mediumDifficulty.remove();
+    hardDifficulty.remove();
     heading.innerText = "Tic-Tac-Toe";
 }
 
@@ -111,7 +111,7 @@ function setUpBoardEventListeners() {
                         if (temp) return;
                     })();
                     (async function eventDelay() {
-                        let id = await delay(100);
+                        let id = await delay(200);
                         clearInterval(id);
                         computeComputerMove();
                         (async function winnerDelay() {
@@ -230,13 +230,13 @@ xSelectorBackFace.addEventListener("click", () => {
 
 easyDifficulty.addEventListener("click", () => {
     computeComputerMove = computeEasyComputerMove;
+    visited.forEach((_, index) => visited[index] = 0);
     hideDifficultySelectors();
     beginGame();
 });
 
-mediumDifficulty.addEventListener("click", () => {
-    computeComputerMove = computeMediumComputerMove;
-    visited.forEach((_, index) => visited[index] = 0);
+hardDifficulty.addEventListener("click", () => {
+    computeComputerMove = computeHardComputerMove;
     hideDifficultySelectors();
     beginGame();
 });
