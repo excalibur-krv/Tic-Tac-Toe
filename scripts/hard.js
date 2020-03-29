@@ -127,10 +127,13 @@ function computeHardComputerMove() {
             break;
         }
     }
-    console.log(choice);
 
-    if (!board[choice].innerText.includes(player1))
+    console.log("chosen", choice);
+
+    if (!board[choice].innerText.includes(player1) && !board[choice].innerText.includes(player2))
         board[choice].innerText = player2;
+    else
+        alert("Draw");
 }
 
 export { computeHardComputerMove };

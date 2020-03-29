@@ -43,6 +43,20 @@ function findWinner(board, WIN_COMBINATIONS, player1, player2) {
         hideBoard();
         return true;
     }
+
+    let count = 0;
+
+    for (let elem of board) {
+        if (elem.innerText.includes(player1) || elem.innerText.includes(player2)) {
+            count += 1;
+        }
+    }
+
+    if (count === board.length) {
+        hideBoard();
+        return true;
+    }
+
     return false;
 }
 

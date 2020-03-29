@@ -53,7 +53,7 @@ function computeEasyComputerMove() {
             computerSelection = maximumUnoccupied(board, WIN_COMBINATIONS, player1, player2);
             if (!computerSelection.every((elem) => visited[elem] === 1)) {
                 updateVisited();
-                return computeMediumComputerMove();
+                return computeEasyComputerMove();
             } else {
                 computerSelection = [];
                 visited.forEach((elem, index) => {
@@ -62,7 +62,7 @@ function computeEasyComputerMove() {
                     }
                 })
                 updateVisited();
-                return computeMediumComputerMove();
+                return computeEasyComputerMove();
             }
         } else {
             let index = computerSelection.pop();
@@ -77,7 +77,7 @@ function computeEasyComputerMove() {
                         computerSelection.push(index);
                     }
                 })
-                return computeMediumComputerMove();
+                return computeEasyComputerMove();
             }
         }
     }
