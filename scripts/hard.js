@@ -26,7 +26,7 @@ function terminal(board) {
         let k = combination[2];
 
         if ((board[i].includes(player1) && board[j].includes(player1) && board[k].includes(player1)) ||
-            (board[i].includes(player1) && board[j].includes(player1) && board[k].includes(player1))) {
+            (board[i].includes(player2) && board[j].includes(player2) && board[k].includes(player2))) {
             return true;
         }
     }
